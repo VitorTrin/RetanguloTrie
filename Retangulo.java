@@ -321,7 +321,7 @@ public class Retangulo {
         palavras.add("abacate");
         palavras.add("pequeno");
         palavras.add("aborigene");
-        palavras.add("inconstitucionalissimamente");
+//        palavras.add("inconstitucionalissimamente");
 
         long tempoDeInicio = System.currentTimeMillis();
         Retangulo instancia = new Retangulo(palavras);

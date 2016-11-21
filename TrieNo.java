@@ -2,15 +2,14 @@
  * Created by vitor on 19/11/16.
  */
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class TrieNo
 {
 
     public TrieNo pai;
-//    private TrieNo[] filhos;
-    public HashMap<Character,TrieNo> filhos;
+    private TrieNo[] filhos;
+//    public HashMap<Character,TrieNo> filhos;
     public boolean eFolha; // pra saber se tem filhos
     public boolean ePalavra;
     public char chave;
@@ -19,7 +18,8 @@ public class TrieNo
     public TrieNo()
     { //usado pela raiz
 
-        filhos = new HashMap<>(); //caracteres no alfabeto
+//        filhos = new HashMap<>(); //caracteres no alfabeto
+        filhos = new TrieNo[26];
         eFolha = true;
         ePalavra = false;
         profundidade = 0;
@@ -36,32 +36,37 @@ public class TrieNo
     protected void adicionaPalavra(String palavra) {
 
         eFolha = false;
-        Character charPos = palavra.charAt(0); //pra indexar o array com os char. Apenas minúsculas
+//        Character charPos = palavra.charAt(0); //pra indexar o array com os char. Apenas minúsculas
+        int charPos = palavra.charAt(0) - 'a';
 
-        if(filhos.get(charPos) == null)
+ //       if(filhos.get(charPos) == null)
+        if(filhos[charPos] == null)
         {// não existe
 
-            TrieNo novo = new TrieNo( palavra.charAt(0));
-            novo.pai = this;
-            novo.profundidade = profundidade + 1;
-            filhos.put(charPos, novo);
+//            TrieNo novo = new TrieNo( palavra.charAt(0));
+//            novo.pai = this;
+//            novo.profundidade = profundidade + 1;
+//            filhos.put(charPos, novo);
+            filhos[charPos] = new TrieNo(palavra.charAt(0));
+            filhos[charPos].pai = this;
         }
+
 
         if (palavra.length() > 1)
         {
-            filhos.get(charPos).adicionaPalavra(palavra.substring(1));
+            filhos[charPos].adicionaPalavra(palavra.substring(1));
         }
 
         else //acabou a palavra
         {
-            filhos.get(charPos).ePalavra = true;
+            filhos[charPos].ePalavra = true;
         }
 
     }
 
     protected TrieNo getNo (char c)
     {
-        return filhos.get(c);
+        return filhos[c - 'a'];
     }
 
     protected List getPalavras()
@@ -73,24 +78,24 @@ public class TrieNo
             lista.add(toString());
         }
 
-//        if(!eFolha)
-//        {
-//            for( int i =0; i < filhos.length; i++)
-//            {
-//                if ( filhos[i] != null)
-//                {
-//                    lista.addAll(filhos[i].getPalavras());
-//                }
-//            }
-//        }
         if(!eFolha)
         {
-            if(filhos != null && !filhos.isEmpty())
-            for ( Character key : filhos.keySet())
+            for( int i =0; i < filhos.length; i++)
             {
-                    lista.addAll(filhos.get(key).getPalavras());
+                if ( filhos[i] != null)
+                {
+                    lista.addAll(filhos[i].getPalavras());
+                }
             }
         }
+//        if(!eFolha)
+//        {
+//            if(filhos != null && !filhos.isEmpty())
+//            for ( Character key : filhos.keySet())
+//            {
+//                    lista.addAll(filhos.get(key).getPalavras());
+//            }
+//        }
 
         return lista;
     }
@@ -104,58 +109,57 @@ public class TrieNo
                 lista.add(toString());
         }
 
-//        if(!eFolha && (profundidade + 1) <= tamanho)
-//        {
-//            for( int i =0; i < filhos.length; i++)
-//            {
-//                if ( filhos[i] != null)
-//                {
-//                    lista.addAll(filhos[i].getPalavrasTamanho(tamanho));
-//                }
-//            }
-//        }
         if(!eFolha && (profundidade + 1) <= tamanho)
         {
-            if(filhos != null && !filhos.isEmpty())
-            for ( Character key : filhos.keySet())
+            for( int i =0; i < filhos.length; i++)
             {
-                lista.addAll(filhos.get(key).getPalavrasTamanho(tamanho));
+                if ( filhos[i] != null)
+                {
+                    lista.addAll(filhos[i].getPalavrasTamanho(tamanho));
+                }
             }
         }
-
+//        if(!eFolha && (profundidade + 1) <= tamanho)
+//        {
+//            if(filhos != null && !filhos.isEmpty())
+//            for ( Character key : filhos.keySet())
+//            {
+//                lista.addAll(filhos.get(key).getPalavrasTamanho(tamanho));
+//            }
+//        }
+//
 
         return lista;
     }
 
     protected boolean achaAlgum(int tamanho) // vai testar o tamanho em cada nó. Vale a pena, pq para cedo?
     {
-        List lista = new ArrayList();
 
         if(ePalavra && profundidade == tamanho)
         {
             return true;
         }
 
-//        if(!eFolha && (profundidade + 1) <= tamanho)
-//        {
-//            for( int i =0; i < filhos.length; i++)
-//            {
-//                if ( filhos[i] != null)
-//                {
-//                    return filhos[i].achaAlgum(tamanho);
-//                }
-//            }
-//        }
-
         if(!eFolha && (profundidade + 1) <= tamanho)
         {
-            if(filhos != null && !filhos.isEmpty())
-                for ( Character key : filhos.keySet())
+            for( int i =0; i < filhos.length; i++)
+            {
+                if ( filhos[i] != null)
                 {
-                    return filhos.get(key).achaAlgum(tamanho);
+                    return filhos[i].achaAlgum(tamanho);
                 }
-
+            }
         }
+
+//        if(!eFolha && (profundidade + 1) <= tamanho)
+//        {
+//            if(filhos != null && !filhos.isEmpty())
+//                for ( Character key : filhos.keySet())
+//                {
+//                    return filhos.get(key).achaAlgum(tamanho);
+//                }
+//
+//        }
 
         return false;
 
