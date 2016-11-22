@@ -42,19 +42,17 @@ public class Retangulo {
 
     private void preProcessarPalavrasTrie(List<String> palavras)
     {
+        //sempre tem de ser executado depois do outro agora
         trie = new ArrayList<>();
-        maxTamanho = 0;
+        for(int i = 0; i <= maxTamanho; i++ ){
+            Trie novaTrie = new Trie();
+            trie.add(novaTrie);
+        }
+
         for(String palavra : palavras)
         {
             int tamanho = palavra.length();
-            if(tamanho > maxTamanho) {
-                this.maxTamanho = Math.max(tamanho, maxTamanho);
-                Trie novaTrie = new Trie();
-                novaTrie.adicionaPalavra(palavra);
-                trie.add(tamanho, novaTrie);// preciso inicializar a lista. Como?
-            }
-            else
-                trie.get(tamanho).adicionaPalavra(palavra);
+            trie.get(tamanho).adicionaPalavra(palavra);// preciso inicializar a lista. Como?
         }
     }
 
@@ -328,7 +326,7 @@ public class Retangulo {
         palavras.add("abacate");
         palavras.add("pequeno");
         palavras.add("aborigene");
-//        palavras.add("inconstitucionalissimamente");
+//      palavras.add("inconstitucionalissimamente");
 
         long tempoDeInicio = System.currentTimeMillis();
         Retangulo instancia = new Retangulo(palavras);
