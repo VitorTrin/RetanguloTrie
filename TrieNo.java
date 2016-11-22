@@ -165,6 +165,33 @@ public class TrieNo
 
     }
 
+    protected boolean achaAlgum()
+    {
+
+        if(ePalavra)
+        {
+            return true;
+        }
+
+        if(!eFolha )
+        {
+            for( int i =0; i < filhos.length; i++)
+            {
+                if ( filhos[i] != null)
+                {
+                    return filhos[i].achaAlgum();
+                }
+            }
+        }
+
+        return false;
+
+    }
+
+
+
+
+
     public String toString() // a string q esse nó representa. Complexidade: O(n), sendo n o tamanho da string
 
     {

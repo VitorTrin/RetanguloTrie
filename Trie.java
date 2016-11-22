@@ -67,6 +67,22 @@ public class Trie {
         return ultimoNo.achaAlgum(tamanho);
     }
 
+    public boolean achaAlgum(String prefixo)
+    {
+        TrieNo ultimoNo = raiz;
+        for( int i = 0 ; i < prefixo.length(); i++)
+        {
+            ultimoNo = ultimoNo.getNo(prefixo.charAt(i));
+
+            if(ultimoNo == null) //não achou a palavra
+                return false;
+
+        }
+
+        return ultimoNo.achaAlgum();
+    }
+
+
 
 }
 

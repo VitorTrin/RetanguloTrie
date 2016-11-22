@@ -7,7 +7,7 @@ import java.util.Set;
 public class Retangulo {
 
     List<Set<String>> palavrasPorTamanho;
-    Trie trie;
+    List<Trie> trie;
     int maxTamanho;
 
     public Retangulo(List<String> palavras) {
@@ -17,7 +17,7 @@ public class Retangulo {
 
     public Retangulo(List<String> palavras, int dummy)
     {
-        trie = new Trie();
+
         preProcessarPalavras(palavras);
         preProcessarPalavrasTrie(palavras);
     }
@@ -42,12 +42,19 @@ public class Retangulo {
 
     private void preProcessarPalavrasTrie(List<String> palavras)
     {
+        trie = new ArrayList<>();
         maxTamanho = 0;
         for(String palavra : palavras)
         {
             int tamanho = palavra.length();
-            this.maxTamanho = Math.max(tamanho, maxTamanho);
-            trie.adicionaPalavra(palavra);// Ponto pra trie, isso é bem mais fácil
+            if(tamanho > maxTamanho) {
+                this.maxTamanho = Math.max(tamanho, maxTamanho);
+                Trie novaTrie = new Trie();
+                novaTrie.adicionaPalavra(palavra);
+                trie.add(tamanho, novaTrie);// preciso inicializar a lista. Como?
+            }
+            else
+                trie.get(tamanho).adicionaPalavra(palavra);
         }
     }
 
@@ -271,8 +278,8 @@ public class Retangulo {
             } else {
                 // queremos na verdade saber se a palavra
                 // referente a essa coluna eh prefixo de alguma palavra valida
-                if (trie.achaAlgum(palavra, tamanhoAlvo)) { // linha onde o codigo difere tb, usa trie pra procurar
-                    return false;
+                    if (trie.get(tamanhoAlvo).achaAlgum(palavra)) { // linha onde o codigo difere tb, usa trie pra procurar
+                        return true;
                 }
             }
         }
